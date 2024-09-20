@@ -1,106 +1,88 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import './Navbar.css';
+import './Navbar.css'
 
-const Navbar = () => {
-    const [fields, setFields] = useState([]);
-    const [formData, setFormData] = useState({ title: '', description: '', email: '' });
-    const navigate = useNavigate();
+const Navbar = ({ fields, onAddField, onRemoveField }) => {
+  const [showPopup, setShowPopup] = useState(false);
+  const [editingField, setEditingField] = useState(null); 
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
+  };
 
-    const addField = (fieldName) => {
-        if (!fields.includes(fieldName)) {
-            setFields([...fields, fieldName]);
-        }
-    };
 
-    const removeField = (fieldName) => {
-        setFields(fields.filter(field => field !== fieldName));
-    };
+  const handleFieldClick = (field) => {
+    if (field === "Welcome Screen") {
+      setEditingField(field); 
+    }
+  };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
+  const handleSave = () => {
+    setEditingField(null); 
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        alert(`Title: ${formData.title}, Description: ${formData.description}, Email: ${formData.email}`);
-        setFormData({ title: '', description: '', email: '' });
-    };
+  const handleDiscard = () => {
+    setEditingField(null);
+  };
 
-    return (
-        <div className="navbar">
-            <button className="BackButton" onClick={() => navigate(-1)}>
-                &larr; Back
-            </button>
-            <h3>Form Editor</h3>
+  return (
+    <nav className="navbar">
+    {editingField === null && (
+         <div className="selected-fields">
+         {fields.map((field, index) => (
+           <div key={index} className="field-item">
+             <span onClick={() => handleFieldClick(field)}>{field}</span>
+             <button onClick={() => onRemoveField(index)}>Remove</button>
+           </div>
+         ))}
+       </div>
+    )}
+     
 
-            {/* Add Field Button */}
-            <button className="AddFieldButton" onClick={() => addField("Enter Your Mail")}>
-                Add a Field
-            </button>
 
-            <ul className="navLists">
-                {fields.map((field, index) => (
-                    <li key={index}>
-                        {field}
-                        <button onClick={() => removeField(field)}>Remove</button>
-                    </li>
-                ))}
-            </ul>
-
-            {/* Only show the form when fields have been added */}
-            {fields.length > 0 && (
-                <form onSubmit={handleSubmit}>
-                    {fields.includes("Welcome Screen") && (
-                        <div className="formG">
-                            <label htmlFor="title">Title: </label>
-                            <input 
-                                type="text" 
-                                id="title"
-                                name="title"
-                                value={formData.title}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    )}
-                    {fields.includes("Profile") && (
-                        <div className="formG">
-                            <label htmlFor="description">Description: </label>
-                            <input 
-                                type="text" 
-                                id="description"
-                                name="description"
-                                value={formData.description}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    )}
-                    {fields.includes("Enter Your Mail") && (
-                        <div className="formG">
-                            <label htmlFor="email">Email: </label>
-                            <input 
-                                type="email" 
-                                id="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    )}
-                    <button type="submit" className="fromSubmit">Submit</button>
-                    {/* Buttons for adding different fields */}
-<button onClick={() => addField("Welcome Screen")}>Add Welcome Screen</button>
-<button onClick={() => addField("Profile")}>Add Profile</button>
-<button onClick={() => addField("Enter Your Mail")}>Add Enter Your Mail</button>
-
-                </form>
-            )}
+      {editingField === "Welcome Screen" && (
+        <div className="form-container">
+          <h3>Welcome Screen Settings</h3>
+          <form>
+            <div>
+              <label htmlFor="title">Enter Your Title:</label>
+              <input type="text" id="title" name="title" />
+            </div>
+            <div>
+              <label htmlFor="description">Enter Your Description:</label>
+              <input type="text" id="description" name="description" />
+            </div>
+            <div>
+              <label htmlFor="image">Enter Your Image URL:</label>
+              <input type="text" id="image" name="image" />
+            </div>
+            <div className="form-buttons">
+              <button type="button" onClick={handleSave}>Save</button>
+              <button type="button" onClick={handleDiscard}>Discard</button>
+            </div>
+          </form>
         </div>
-    );
+      )}
+    
+
+      { editingField === null &&(
+        <button className="btn-add-field" onClick={togglePopup}>
+        Add Field
+        </button>
+
+      )}
+      
+      {showPopup && editingField == null && (
+        <div className="popup">
+          <div className="popup-content">
+            <h3>Select a field to add:</h3>
+            <button onClick={() => { onAddField("Welcome Screen"); togglePopup(); }}>Welcome Screen</button>
+            <button onClick={() => { onAddField("Enter Your Email"); togglePopup(); }}>Enter Your Email</button>
+            <button onClick={() => { onAddField("Enter Your Name"); togglePopup(); }}>Enter Your Name</button>
+            <button className="btn-close" onClick={togglePopup}>Close</button>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
 };
 
 export default Navbar;

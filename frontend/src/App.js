@@ -1,28 +1,35 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import React, { useState } from 'react';
 import Navbar from './components/navbar/Navbar';
-import Home from './components/home/Home';
-import Profile from './components/profile/Profile';
-import Settings from './components/settings/Settings';
+
 
 
 function App() {
+
+  const [fields, setFields] = useState([]);
+
+  // Function to add a new field
+  const addField = (field) => {
+    setFields([...fields, field]);
+  };
+
+  // Function to remove a field
+  const removeField = (index) => {
+    const updatedFields = fields.filter((_, i) => i !== index);
+    setFields(updatedFields);
+  };
+
+
   return (
-    <Router>
+
       <div className="left-container">
-        <Navbar />
+      <Navbar fields={fields} onAddField={addField} onRemoveField={removeField} />
 
         <div className="right-content">
-          <Routes>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/profile" element={<Profile/>}/>
-            <Route path="/settings" element={<Settings/>}/>
-
-          </Routes>
+          
         </div>
       </div>
-    </Router>
+
   );
 }
 
