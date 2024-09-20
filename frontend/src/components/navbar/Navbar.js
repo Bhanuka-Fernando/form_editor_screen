@@ -23,6 +23,14 @@ const Navbar = ({ fields, onAddField, onRemoveField }) => {
     setEditingField(null);
   };
 
+  const handleAddField = (field) => {
+    if (!fields.includes(field)) {
+        onAddField(field);
+    }
+    togglePopup();
+  }
+
+
   return (
     <nav className="navbar">
     {editingField === null && (
@@ -74,9 +82,9 @@ const Navbar = ({ fields, onAddField, onRemoveField }) => {
         <div className="popup">
           <div className="popup-content">
             <h3>Select a field to add:</h3>
-            <button onClick={() => { onAddField("Welcome Screen"); togglePopup(); }}>Welcome Screen</button>
-            <button onClick={() => { onAddField("Enter Your Email"); togglePopup(); }}>Enter Your Email</button>
-            <button onClick={() => { onAddField("Enter Your Name"); togglePopup(); }}>Enter Your Name</button>
+            <button onClick={() => { handleAddField("Welcome Screen") }}>Welcome Screen</button>
+            <button onClick={() => { handleAddField("Enter Your Email")  }}>Enter Your Email</button>
+            <button onClick={() => { handleAddField("Enter Your Name") }}>Enter Your Name</button>
             <button className="btn-close" onClick={togglePopup}>Close</button>
           </div>
         </div>
