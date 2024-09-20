@@ -1,0 +1,10 @@
+.left-container {
+    display: flex; /* Remove quotes */
+    flex-direction: row; /* Corrected property name and removed quotes */
+    height: 100vh;
+}
+
+.right-content {
+    flex-grow: 1; /* Corrected property name and removed quotes */
+    padding: 20px; /* Remove quotes */
+}
