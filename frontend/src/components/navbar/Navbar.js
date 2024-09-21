@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import './Navbar.css'
+import './Navbar.css';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate
 
 const Navbar = ({ fields, onAddField, onRemoveField, welcomeData, onUpdateWelcomeData, emailData, onUpdateEmailData }) => {
-    
   const [showPopup, setShowPopup] = useState(false);
-  const [editingField, setEditingField] = useState(null); 
+  const [editingField, setEditingField] = useState(null);
+  const [emailError, setEmailError] = useState(""); // State to store email validation error
+
+  const navigate = useNavigate();  // Initialize the navigation hook
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
-
 
   const handleFieldClick = (field) => {
     setEditingField(field); // Set the editing field when clicked
@@ -25,24 +27,46 @@ const Navbar = ({ fields, onAddField, onRemoveField, welcomeData, onUpdateWelcom
 
   const handleAddField = (field) => {
     if (!fields.includes(field)) {
-        onAddField(field);
+      onAddField(field);
     }
     togglePopup();
-  }
 
-  // Real-time change handlers
-  const handleInputChange = (e) => {
-    const {name, value} = e.target;
-    if (editingField === "Welcome Screen") {
-      onUpdateWelcomeData(name, value);
-    } else if (editingField === "Enter Your Email") {
-      onUpdateEmailData(name, value);
+    // Navigate to the corresponding page
+    if (field === "Welcome Screen") {
+      navigate('/');
+    } else if (field === "Enter Your Email") {
+      navigate('/email');
     }
   };
 
+  const validateEmail = (email) => {
+    // Basic email format validation using regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+  
+    if (editingField === "Welcome Screen") {
+      onUpdateWelcomeData(name, value);
+    } else if (editingField === "Enter Your Email") {
+      if (name === "email") {
+        onUpdateEmailData(name, value);  // Always update the input value
+        if (validateEmail(value)) {
+          setEmailError("");  // Clear error if valid
+        } else {
+          setEmailError("Please enter a valid email address");  // Show error if invalid
+        }
+      }
+    }
+  };
+  
+    
+  
+
   return (
     <nav className="navbar">
-      {/* Display added fields */}
       {editingField === null && (
         <div className="selected-fields">
           {fields.map((field, index) => (
@@ -53,8 +77,7 @@ const Navbar = ({ fields, onAddField, onRemoveField, welcomeData, onUpdateWelcom
           ))}
         </div>
       )}
-     
-      {/* Welcome Screen Form */}
+
       {editingField === "Welcome Screen" && (
         <div className="form-container">
           <h3>Welcome Screen Settings</h3>
@@ -97,7 +120,6 @@ const Navbar = ({ fields, onAddField, onRemoveField, welcomeData, onUpdateWelcom
         </div>
       )}
 
-      {/* Enter Your Email Form */}
       {editingField === "Enter Your Email" && (
         <div className="form-container">
           <h3>Email Settings</h3>
@@ -111,6 +133,7 @@ const Navbar = ({ fields, onAddField, onRemoveField, welcomeData, onUpdateWelcom
                 value={emailData.email}
                 onChange={handleInputChange}
               />
+              {emailError && <span className="error-message">{emailError}</span>} {/* Error message display */}
             </div>
             <div className="form-buttons">
               <button type="button" onClick={handleSave}>Save</button>
@@ -120,14 +143,12 @@ const Navbar = ({ fields, onAddField, onRemoveField, welcomeData, onUpdateWelcom
         </div>
       )}
 
-      {/* Add Field Button */}
       {editingField === null && (
         <button className="btn-add-field" onClick={togglePopup}>
           Add Field
         </button>
       )}
 
-      {/* Popup for Adding Fields */}
       {showPopup && editingField === null && (
         <div className="popup">
           <div className="popup-content">
