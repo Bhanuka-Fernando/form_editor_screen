@@ -1,0 +1,105 @@
+.navbar {
+    width: 30%; /* Remove quotes */
+    background: #f4f4f4; /* Remove quotes */
+    height: 100%;
+    padding: 10px; /* Remove quotes */
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1); /* Use the correct camelCase for box-shadow */
+}
+
+.selected-fields {
+    margin-bottom: 1rem;
+  }
+  
+  .field-item {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+  }
+  
+  .field-item span {
+    cursor: pointer;
+  }
+  
+  .field-item button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-add-field {
+    padding: 10px 20px;
+    background-color: #28a745;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .form-container {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    width: 300px;
+    margin-top: 20px;
+  }
+  
+  .form-container form div {
+    margin-bottom: 10px;
+  }
+  
+  .form-container form label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-container form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .form-buttons button {
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .popup-content button {
+    margin: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .btn-close {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
